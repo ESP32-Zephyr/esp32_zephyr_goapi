@@ -1,6 +1,3 @@
-# Protobuf generated files}
-cmds
-
 # Test binary and coverage
 *.test
 coverage.out
