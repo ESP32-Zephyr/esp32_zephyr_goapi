@@ -16,6 +16,21 @@ type Esp32Client struct {
     DestPort    uint16
 }
 
+func ResolveHost(host string) (string, error) {
+    ips, err := net.LookupIP(host)
+    if err != nil {
+        return "", err
+    }
+
+    for _, ip := range ips {
+        if ipv4 := ip.To4(); ipv4 != nil {
+            return ipv4.String(), nil
+        }
+    }
+
+    return "", errors.New("no IPv4 address found")
+}
+
 func NewEsp32Client (transport string, ipv4 string, dest_port uint16) (*Esp32Client, error) {
     if transport != "tcp" && transport != "udp" {
         return nil, errors.New("Invalid transport type")
