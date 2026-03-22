@@ -267,3 +267,27 @@ func (c *Esp32Client) PwmPeriodIntervalGet() (*cmds.PwmPeriodsGetRes, error) {
     }
     return result, nil
 }
+
+func (c *Esp32Client) Ping() (*cmds.PingRes, error) {
+    cmd_id := cmds.CommandId_PING
+    req := &cmds.Request{
+        Hdr: &cmds.ReqHdr{
+            Id: &cmd_id,
+        },
+        Pl: &cmds.Request_Ping{
+            Ping: &cmds.PingReq{},
+        },
+    }
+
+    resp, err := c.SendCmd(req)
+    if err != nil {
+        return nil, err
+    }
+
+    result := resp.GetPing()
+    if result == nil {
+        return nil, errors.New("Invalid response: Failed to retrieve ping response")
+    }
+
+    return result, nil
+}

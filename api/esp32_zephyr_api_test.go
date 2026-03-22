@@ -305,3 +305,30 @@ func TestPwmPeriodIntervalGet(t *testing.T) {
 		})
 	}
 }
+
+func TestPing(t *testing.T) {
+	tests := []struct {
+		name    string
+		client  *Esp32Client
+		wantErr bool
+	}{
+		{
+			name: "Ping",
+			client: &Esp32Client{
+				Transport: "tcp",
+				Ipv4:      testIPv4,
+				DestPort:  testPort,
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := tt.client.Ping()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Ping() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
